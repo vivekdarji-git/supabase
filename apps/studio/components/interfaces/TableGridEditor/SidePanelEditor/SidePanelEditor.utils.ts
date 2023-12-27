@@ -5,7 +5,7 @@ import { FOREIGN_KEY_CASCADE_ACTION } from 'data/database/database-query-constan
 import { executeSql } from 'data/sql/execute-sql-query'
 import { getViews } from 'data/views/views-query'
 import { useStore } from 'hooks'
-import { find, isUndefined } from 'lodash'
+import { isUndefined } from 'lodash'
 import { useEffect, useState } from 'react'
 import { IUiStore } from 'stores/UiStore'
 import { IMetaStore } from 'stores/pgmeta/MetaStore'
@@ -262,10 +262,10 @@ export const updateColumn = async (
       payload: formattedPayload,
     })
 
-    const originalColumn = find(selectedTable.columns, { id })
-    const existingForeignKey = find(selectedTable.relationships, {
-      source_column_name: originalColumn!.name,
-    })
+    const originalColumn = selectedTable.columns?.find((c) => c.id === id)
+    const existingForeignKey = selectedTable.relationships.find(
+      (r) => r.source_column_name === originalColumn!.name
+    )
 
     if (!skipPKCreation && isPrimaryKey !== undefined) {
       const existingPrimaryKeys = selectedTable.primary_keys.map((x) => x.name)

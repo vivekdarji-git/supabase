@@ -334,7 +334,11 @@ const SidePanelEditor = ({
   }
 
   const saveTable = async (
-    payload: any,
+    payload: {
+      name: string
+      schema: string
+      comment?: string | undefined
+    },
     columns: ColumnField[],
     isNewRecord: boolean,
     configuration: {
