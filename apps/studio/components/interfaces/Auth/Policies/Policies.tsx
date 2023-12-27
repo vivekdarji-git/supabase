@@ -38,7 +38,7 @@ const Policies = ({
   const { ref } = useParams()
   const { project } = useProjectContext()
 
-  const { ui, meta } = useStore()
+  const { ui } = useStore()
   const queryClient = useQueryClient()
   const isAiAssistantEnabled = useIsRLSAIAssistantEnabled()
 

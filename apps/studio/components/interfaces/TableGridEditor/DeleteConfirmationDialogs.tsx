@@ -34,7 +34,7 @@ const DeleteConfirmationDialogs = ({
   selectedTable,
   onAfterDeleteTable = noop,
 }: DeleteConfirmationDialogsProps) => {
-  const { meta, ui } = useStore()
+  const { ui } = useStore()
   const queryClient = useQueryClient()
   const { project } = useProjectContext()
   const snap = useTableEditorStateSnapshot()

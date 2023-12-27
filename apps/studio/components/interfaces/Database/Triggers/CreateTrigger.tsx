@@ -1,4 +1,3 @@
-import { PostgresFunction } from '@supabase/postgres-meta'
 import { has, isEmpty, mapValues, union, without } from 'lodash'
 import { makeAutoObservable } from 'mobx'
 import { observer, useLocalObservable } from 'mobx-react-lite'
@@ -6,7 +5,6 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import SVG from 'react-inlinesvg'
 
-import { Dictionary } from 'types'
 import { useProjectContext } from 'components/layouts/ProjectLayout/ProjectContext'
 import ConfirmationModal from 'components/ui/ConfirmationModal'
 import FormEmptyBox from 'components/ui/FormBoxEmpty'
@@ -21,6 +19,7 @@ import { useTablesQuery } from 'data/tables/tables-query'
 import { useStore } from 'hooks'
 import { BASE_PATH } from 'lib/constants'
 import { EXCLUDED_SCHEMAS } from 'lib/constants/schemas'
+import { Dictionary } from 'types'
 import {
   Badge,
   Button,
@@ -238,7 +237,7 @@ interface CreateTriggerProps {
 
 const CreateTrigger = ({ trigger, visible, setVisible }: CreateTriggerProps) => {
   const { project } = useProjectContext()
-  const { ui, meta } = useStore()
+  const { ui } = useStore()
   const [isClosingPanel, setIsClosingPanel] = useState(false)
   const _localState = useLocalObservable(() => new CreateTriggerStore())
 

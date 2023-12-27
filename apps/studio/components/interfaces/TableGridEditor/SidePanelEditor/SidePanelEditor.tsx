@@ -58,7 +58,7 @@ const SidePanelEditor = ({
   const snap = useTableEditorStateSnapshot()
   const [_, setParams] = useUrlState({ arrayKeys: ['filter', 'sort'] })
 
-  const { meta, ui } = useStore()
+  const { ui } = useStore()
   const queryClient = useQueryClient()
   const { project } = useProjectContext()
 
