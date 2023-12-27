@@ -1,5 +1,6 @@
 import { PostgresRelationship, PostgresTable } from '@supabase/postgres-meta'
 import { Query } from 'components/grid/query/Query'
+import { useProjectContext } from 'components/layouts/ProjectLayout/ProjectContext'
 import { createDatabaseColumn } from 'data/database-columns/database-column-create-mutation'
 import { deleteDatabaseColumn } from 'data/database-columns/database-column-delete-mutation'
 import { updateDatabaseColumn } from 'data/database-columns/database-column-update-mutation'
@@ -13,13 +14,11 @@ import { getTable } from 'data/tables/table-query'
 import { updateTable as updateTableMutation } from 'data/tables/table-update-mutation'
 import { getTables } from 'data/tables/tables-query'
 import { getViews } from 'data/views/views-query'
-import { useStore } from 'hooks'
 import { timeout, tryParseJson } from 'lib/helpers'
 import { chunk, find, isEmpty, isEqual, isUndefined } from 'lodash'
 import Papa from 'papaparse'
 import { useEffect, useState } from 'react'
 import { IUiStore } from 'stores/UiStore'
-import { IMetaStore } from 'stores/pgmeta/MetaStore'
 import {
   generateCreateColumnPayload,
   generateUpdateColumnPayload,
@@ -40,30 +39,33 @@ export interface UseEncryptedColumnsArgs {
   tableName?: string
 }
 
-const listEncryptedColumns = async (meta: IMetaStore, schema: string, table: string) => {
+const listEncryptedColumns = async (
+  projectRef: string,
+  connectionString: string | undefined = undefined,
+  schema: string,
+  table: string
+) => {
   if (!table) return []
 
-  const views = await getViews({
-    projectRef: meta.projectRef,
-    connectionString: meta.connectionString,
-    schema,
-  })
+  const views = await getViews({ projectRef, connectionString, schema })
   const decryptedView = views.find((view) => view.name === `decrypted_${table}`)
   if (!decryptedView) return []
 
-  const encryptedColumns = await meta.query(
-    `SELECT column_name as name FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'decrypted_${table}' and column_name like 'decrypted_%'`
-  )
-  if (!encryptedColumns.error) {
-    return encryptedColumns.map((column: any) => column.name.split('decrypted_')[1])
-  } else {
-    console.error('Error fetching encrypted columns', encryptedColumns.error)
+  try {
+    const encryptedColumns = await executeSql({
+      projectRef,
+      connectionString,
+      sql: `SELECT column_name as name FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'decrypted_${table}' and column_name like 'decrypted_%'`,
+    })
+    return encryptedColumns.result.map((column: any) => column.name.split('decrypted_')[1])
+  } catch (error) {
+    console.error('Error fetching encrypted columns', error)
     return []
   }
 }
 
 export function useEncryptedColumns({ schemaName, tableName }: UseEncryptedColumnsArgs) {
-  const { meta } = useStore()
+  const { project } = useProjectContext()
   const [encryptedColumns, setEncryptedColumns] = useState<string[]>([])
 
   useEffect(() => {
@@ -71,7 +73,12 @@ export function useEncryptedColumns({ schemaName, tableName }: UseEncryptedColum
 
     const getEncryptedColumns = async () => {
       if (schemaName !== undefined && tableName !== undefined) {
-        const columns = await listEncryptedColumns(meta, schemaName, tableName)
+        const columns = await listEncryptedColumns(
+          project?.ref!,
+          project?.connectionString,
+          schemaName,
+          tableName
+        )
 
         if (isMounted) {
           setEncryptedColumns(columns)

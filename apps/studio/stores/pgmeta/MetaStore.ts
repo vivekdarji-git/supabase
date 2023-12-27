@@ -1,18 +1,12 @@
 import { makeObservable } from 'mobx'
 
-import { post } from 'lib/common/fetch'
 import { API_URL, IS_PLATFORM } from 'lib/constants'
-import { ResponseError } from 'types'
 
 import { IRootStore } from '../RootStore'
 
 export interface IMetaStore {
   projectRef?: string
   connectionString?: string
-
-  query: (value: string) => Promise<any | { error: ResponseError }>
-  validateQuery: (value: string) => Promise<any | { error: ResponseError }>
-  formatQuery: (value: string) => Promise<any | { error: ResponseError }>
 
   setProjectDetails: (details: { ref: string; connectionString?: string }) => void
 }
@@ -37,51 +31,6 @@ export default class MetaStore implements IMetaStore {
     }
 
     makeObservable(this, {})
-  }
-
-  /**
-   * Sends a database query
-   */
-  async query(value: string) {
-    try {
-      const headers: any = { 'Content-Type': 'application/json' }
-      if (this.connectionString) headers['x-connection-encrypted'] = this.connectionString
-      const url = `${this.baseUrl}/query`
-      const response = await post(url, { query: value }, { headers })
-      if (response.error) throw response.error
-
-      return response
-    } catch (error: any) {
-      return { error }
-    }
-  }
-
-  async validateQuery(value: string) {
-    try {
-      const headers: any = { 'Content-Type': 'application/json' }
-      if (this.connectionString) headers['x-connection-encrypted'] = this.connectionString
-      const url = `${this.baseUrl}/query/validate`
-      const response = await post(url, { query: value }, { headers })
-      if (response.error) throw response.error
-
-      return response
-    } catch (error: any) {
-      return { error }
-    }
-  }
-
-  async formatQuery(value: string) {
-    try {
-      const headers: any = { 'Content-Type': 'application/json' }
-      if (this.connectionString) headers['x-connection-encrypted'] = this.connectionString
-      const url = `${this.baseUrl}/query/format`
-      const response = await post(url, { query: value }, { headers })
-      if (response.error) throw response.error
-
-      return response
-    } catch (error: any) {
-      return { error }
-    }
   }
 
   setProjectDetails({ ref, connectionString }: { ref: string; connectionString?: string }) {
