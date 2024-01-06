@@ -42,7 +42,9 @@ export const RealtimeTokensPopover = ({ config, onChangeConfig }: RealtimeTokens
       snap.role.type === 'postgrest'
     ) {
       token = anonServiceRoleKey
-      bearer = getRoleImpersonationJWT(config.projectRef, jwtSecret, snap.role)
+      getRoleImpersonationJWT(config.projectRef, jwtSecret, snap.role).then(
+        (token) => (bearer = token)
+      )
     } else {
       token = serviceRoleKey
     }
