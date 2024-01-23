@@ -491,6 +491,10 @@ export interface paths {
     /** Gets project health check */
     get: operations['HealthCheckController_projectHealthCheck']
   }
+  '/platform/projects/{ref}/load-balancers': {
+    /** Gets non-removed databases of a specified project */
+    get: operations['LoadBalancersController_getLoadBalancers']
+  }
   '/platform/projects/{ref}/api/rest': {
     /** Gets project OpenApi */
     get: operations['ApiController_projectOpenApi']
@@ -606,6 +610,10 @@ export interface paths {
     get: operations['StorageConfigController_getConfig']
     /** Updates project's storage config */
     patch: operations['StorageConfigController_updateConfig']
+  }
+  '/platform/projects/{ref}/config/supavisor': {
+    /** Gets project's supavisor config */
+    get: operations['SupavisorConfigController_getSupavisorConfig']
   }
   '/platform/projects/{ref}/billing/addons': {
     /** Gets project addons */
@@ -1247,6 +1255,10 @@ export interface paths {
     /** Gets project health check */
     get: operations['HealthCheckController_projectHealthCheck']
   }
+  '/v0/projects/{ref}/load-balancers': {
+    /** Gets non-removed databases of a specified project */
+    get: operations['LoadBalancersController_getLoadBalancers']
+  }
   '/v0/projects/{ref}/api/rest': {
     /** Gets project OpenApi */
     get: operations['ApiController_projectOpenApi']
@@ -1346,6 +1358,10 @@ export interface paths {
     get: operations['StorageConfigController_getConfig']
     /** Updates project's storage config */
     patch: operations['StorageConfigController_updateConfig']
+  }
+  '/v0/projects/{ref}/config/supavisor': {
+    /** Gets project's supavisor config */
+    get: operations['SupavisorConfigController_getSupavisorConfig']
   }
   '/v0/projects/{ref}/billing/addons': {
     /** Gets project addons */
@@ -2397,8 +2413,8 @@ export interface components {
       id: number
       slug: string
       name: string
-      billing_email: string
-      stripe_customer_id: string
+      billing_email?: string
+      stripe_customer_id?: string
       opt_in_tags: string[]
     }
     CustomerResponse: {
@@ -2784,6 +2800,7 @@ export interface components {
     ProjectAddonType: 'custom_domain' | 'compute_instance' | 'pitr' | 'ipv4'
     /** @enum {string} */
     AddonVariantId:
+      | 'ci_micro'
       | 'ci_small'
       | 'ci_medium'
       | 'ci_large'
@@ -2895,6 +2912,7 @@ export interface components {
       billing_partner: 'fly'
       scheduled_plan_change: components['schemas']['ScheduledPlanChange'] | null
       customer_balance: number
+      nano_enabled: boolean
     }
     UpdateSubscriptionBody: {
       payment_method?: string
@@ -3029,7 +3047,7 @@ export interface components {
       /** @enum {string} */
       behavior: 'VOLATILE' | 'STABLE' | 'IMMUTABLE'
       security_definer: boolean
-      config_params: Record<string, unknown> | null
+      config_params: unknown
     }
     CreateFunctionBody: {
       slug: string
@@ -3452,7 +3470,7 @@ export interface components {
         | 'tenant:Sql:Write:Update'
         | 'write:Update'
       )[]
-      condition: Record<string, unknown> | null
+      condition: unknown
       organization_id: number
       resources: string[]
     }
@@ -3489,7 +3507,21 @@ export interface components {
       first_name: string
       last_name: string
     }
+    /** @enum {string} */
+    DbInstanceSize:
+      | 'nano'
+      | 'micro'
+      | 'small'
+      | 'medium'
+      | 'large'
+      | 'xlarge'
+      | '2xlarge'
+      | '4xlarge'
+      | '8xlarge'
+      | '12xlarge'
+      | '16xlarge'
     ProjectInfo: {
+      infra_compute_size?: components['schemas']['DbInstanceSize']
       cloud_provider: string
       id: number
       inserted_at: string
@@ -3552,6 +3584,7 @@ export interface components {
       kps_enabled?: boolean
     }
     CreateProjectResponse: {
+      infra_compute_size?: components['schemas']['DbInstanceSize']
       cloud_provider: string
       id: number
       inserted_at: string
@@ -3680,6 +3713,16 @@ export interface components {
     UpdatePasswordBody: {
       password: string
     }
+    Database: {
+      identifier: string
+      /** @enum {string} */
+      type: 'PRIMARY' | 'READ_REPLICA'
+      status: string
+    }
+    LoadBalancerDetailResponse: {
+      endpoint: string
+      databases: components['schemas']['Database'][]
+    }
     Buffer: Record<string, never>
     ResizeBody: {
       volume_size_gb: number
@@ -3690,6 +3733,7 @@ export interface components {
       'supabase-postgres': string
     }
     ProjectDetailResponse: {
+      infra_compute_size?: components['schemas']['DbInstanceSize']
       cloud_provider: string
       db_host: string
       id: number
@@ -3941,6 +3985,21 @@ export interface components {
     }
     UpdateStorageConfigResponse: {
       fileSizeLimit: number
+    }
+    SupavisorConfigResponse: {
+      identifier: string
+      /** @enum {string} */
+      database_type: 'PRIMARY' | 'READ_REPLICA'
+      is_using_scram_auth: boolean
+      db_user: string
+      db_host: string
+      db_port: number
+      db_name: string
+      connectionString: string
+      default_pool_size: number | null
+      max_client_conn: number | null
+      /** @enum {string|null} */
+      pool_mode: 'transaction' | 'session' | 'statement' | null
     }
     AvailableAddonResponse: {
       type: components['schemas']['ProjectAddonType']
@@ -8693,6 +8752,22 @@ export interface operations {
       }
     }
   }
+  /** Gets non-removed databases of a specified project */
+  LoadBalancersController_getLoadBalancers: {
+    parameters: {
+      path: {
+        /** @description Project ref */
+        ref: string
+      }
+    }
+    responses: {
+      200: {
+        content: {
+          'application/json': components['schemas']['LoadBalancerDetailResponse'][]
+        }
+      }
+    }
+  }
   /** Gets project OpenApi */
   ApiController_projectOpenApi: {
     parameters: {
@@ -9417,6 +9492,26 @@ export interface operations {
         content: never
       }
       /** @description Failed to update project's storage config */
+      500: {
+        content: never
+      }
+    }
+  }
+  /** Gets project's supavisor config */
+  SupavisorConfigController_getSupavisorConfig: {
+    parameters: {
+      path: {
+        /** @description Project ref */
+        ref: string
+      }
+    }
+    responses: {
+      200: {
+        content: {
+          'application/json': components['schemas']['SupavisorConfigResponse'][]
+        }
+      }
+      /** @description Failed to retrieve project's supavisor config */
       500: {
         content: never
       }
@@ -11140,11 +11235,6 @@ export interface operations {
         'x-vercel-signature': string
       }
     }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['Buffer']
-      }
-    }
     responses: {
       201: {
         content: never
@@ -11162,11 +11252,6 @@ export interface operations {
         'x-github-delivery': string
         'x-github-event': string
         'x-hub-signature-256': string
-      }
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['Buffer']
       }
     }
     responses: {
