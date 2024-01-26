@@ -1,14 +1,15 @@
-import { useEffect, useRef } from 'react'
+import { SearchButton } from '@ui-patterns/Command'
+import { NextSeo } from 'next-seo'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { NextSeo } from 'next-seo'
+import { useEffect, useRef } from 'react'
+import { questions } from 'shared-data'
 import Typed from 'typed.js'
-import { Button, ButtonProps, cn, IconCommand, IconSearch, SearchButton } from 'ui'
+import { Button, ButtonProps, IconCommand, IconSearch, cn } from 'ui'
 
 import DefaultLayout from '~/components/Layouts/Default'
-import Panel from '~/components/Panel'
 import SectionContainer from '~/components/Layouts/SectionContainer'
-import { questions } from 'shared-data'
+import Panel from '~/components/Panel'
 import data from '~/data/support'
 
 const Index = () => {

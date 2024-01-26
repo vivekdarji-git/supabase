@@ -1,8 +1,8 @@
 import { CommandGroup } from 'cmdk'
+import { Badge, IconAlertCircle } from 'ui'
+
 import { useCommandMenu } from './CommandMenuProvider'
-import { Badge } from '../Badge'
 import { CommandItem, copyToClipboard } from './Command.utils'
-import { IconAlertCircle } from './../Icon/icons/IconAlertCircle'
 import ChildItem from './ChildItem'
 
 const APIKeys = ({ isSubItem = false }) => {

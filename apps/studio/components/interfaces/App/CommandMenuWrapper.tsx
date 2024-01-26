@@ -1,19 +1,19 @@
 import { PermissionAction } from '@supabase/shared-types/out/constants'
+import { CommandMenuProvider } from '@ui-patterns/Command'
 import { useParams } from 'common'
-import { PropsWithChildren, useMemo } from 'react'
-import { CommandMenuProvider } from 'ui'
-
 import { codeBlock } from 'common-tags'
+import { PropsWithChildren, useMemo } from 'react'
+
 import { useProjectContext } from 'components/layouts/ProjectLayout/ProjectContext'
 import { useProjectApiQuery } from 'data/config/project-api-query'
 import { SqlSnippet } from 'data/content/sql-snippets-query'
 import { useEntityDefinitionsQuery } from 'data/database/entity-definitions-query'
 import { useCheckPermissions, useSelectedOrganization, useStore } from 'hooks'
+import { OPT_IN_TAGS } from 'lib/constants'
 import { uuidv4 } from 'lib/helpers'
 import { useProfile } from 'lib/profile'
 import { useSqlEditorStateSnapshot } from 'state/sql-editor'
 import { createSqlSnippetSkeleton } from '../SQLEditor/SQLEditor.utils'
-import { OPT_IN_TAGS } from 'lib/constants'
 
 const CommandMenuWrapper = ({ children }: PropsWithChildren<{}>) => {
   const { ref } = useParams()

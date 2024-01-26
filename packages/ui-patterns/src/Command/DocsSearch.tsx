@@ -1,8 +1,8 @@
+import { useSupabaseClient } from '@supabase/auth-helpers-react'
+import { compact, debounce, uniqBy } from 'lodash'
+import { useRouter } from 'next/router'
 import * as React from 'react'
 import { useCallback, useEffect, useMemo, useReducer, useRef } from 'react'
-import { compact, debounce, uniqBy } from 'lodash'
-
-import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import {
   Button,
   IconAlertTriangle,
@@ -12,8 +12,8 @@ import {
   IconHash,
   IconMessageSquare,
   IconSearch,
-  useCommandMenu,
 } from 'ui'
+
 import {
   CommandGroup,
   CommandItem,
@@ -21,7 +21,7 @@ import {
   FORCE_MOUNT_ITEM,
   TextHighlighter,
 } from './Command.utils'
-import { useRouter } from 'next/router'
+import { useCommandMenu } from './CommandMenuProvider'
 
 const NUMBER_SOURCES = 2
 

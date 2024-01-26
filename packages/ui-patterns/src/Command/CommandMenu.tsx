@@ -2,18 +2,20 @@ import { useParams } from 'common'
 import { useRouter } from 'next/router'
 import * as React from 'react'
 
-import { AiIconAnimation } from '../../layout/ai-icon-animation/ai-icon-animation'
-import { IconHome } from '../Icon/icons/IconHome'
-import { IconArrowRight } from './../Icon/icons/IconArrowRight'
-import { IconBook } from './../Icon/icons/IconBook'
-import { IconColumns } from './../Icon/icons/IconColumns'
-import { IconInbox } from './../Icon/icons/IconInbox'
-import { IconKey } from './../Icon/icons/IconKey'
-import { IconLifeBuoy } from './../Icon/icons/IconLifeBuoy'
-import { IconLink } from './../Icon/icons/IconLink'
-import { IconMonitor } from './../Icon/icons/IconMonitor'
-import { IconPhone } from './../Icon/icons/IconPhone'
-import { IconUser } from './../Icon/icons/IconUser'
+import {
+  AiIconAnimation,
+  IconArrowRight,
+  IconBook,
+  IconColumns,
+  IconHome,
+  IconInbox,
+  IconKey,
+  IconLifeBuoy,
+  IconLink,
+  IconMonitor,
+  IconPhone,
+  IconUser,
+} from 'ui'
 import APIKeys from './APIKeys'
 import AiCommand from './AiCommand'
 import ChildItem from './ChildItem'

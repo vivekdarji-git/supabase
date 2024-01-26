@@ -1,10 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { AiIcon } from '@ui-patterns/Command'
+import { useTelemetryProps } from 'common'
 import { compact, last } from 'lodash'
 import { Loader2 } from 'lucide-react'
+import { useRouter } from 'next/router'
 import { useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import {
-  AiIcon,
   Button,
   FormControl_Shadcn_,
   FormField_Shadcn_,
@@ -14,11 +16,9 @@ import {
   Input_Shadcn_,
 } from 'ui'
 import * as z from 'zod'
-import Telemetry from 'lib/telemetry'
-import { useTelemetryProps } from 'common'
-import { useRouter } from 'next/router'
 
 import { useProfile } from 'lib/profile'
+import Telemetry from 'lib/telemetry'
 import { useAppStateSnapshot } from 'state/app-state'
 import { MessageWithDebug } from './AIPolicyEditorPanel.utils'
 import Message from './Message'

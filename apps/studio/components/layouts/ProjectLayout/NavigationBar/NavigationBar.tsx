@@ -1,11 +1,11 @@
 import * as Tooltip from '@radix-ui/react-tooltip'
+import { useCommandMenu } from '@ui-patterns/Command'
 import { useParams } from 'common'
 import { isUndefined } from 'lodash'
 import { FlaskConical } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-
 import {
   Button,
   DropdownMenu,
@@ -25,7 +25,6 @@ import {
   IconUser,
   Theme,
   themes,
-  useCommandMenu,
 } from 'ui'
 
 import { useIsAPIDocsSidePanelEnabled } from 'components/interfaces/App/FeaturePreview/FeaturePreviewContext'

@@ -1,8 +1,9 @@
 import { PostgresPolicy } from '@supabase/postgres-meta'
+import { AiIcon } from '@ui-patterns/Command'
 import styles from '@ui/layout/ai-icon-animation/ai-icon-animation-style.module.css'
 import clsx from 'clsx'
 import { X } from 'lucide-react'
-import { AiIcon, Button, SheetClose_Shadcn_, SheetHeader_Shadcn_, SheetTitle_Shadcn_, cn } from 'ui'
+import { Button, SheetClose_Shadcn_, SheetHeader_Shadcn_, SheetTitle_Shadcn_, cn } from 'ui'
 
 import { subscriptionHasHipaaAddon } from 'components/interfaces/Billing/Subscription/Subscription.utils'
 import { useOrgSubscriptionQuery } from 'data/subscriptions/org-subscription-query'

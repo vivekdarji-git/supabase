@@ -1,9 +1,10 @@
+import { SearchButton } from '@ui-patterns/Command'
+import { useIsLoggedIn, useIsUserLoading } from 'common'
 import { useTheme } from 'next-themes'
 import Image from 'next/legacy/image'
 import Link from 'next/link'
 import { FC } from 'react'
-import { Button, IconCommand, IconGitHub, IconSearch, SearchButton } from 'ui'
-import { useIsLoggedIn, useIsUserLoading } from 'common'
+import { Button, IconCommand, IconGitHub, IconSearch } from 'ui'
 
 import ThemeToggle from '@ui/components/ThemeProvider/ThemeToggle'
 

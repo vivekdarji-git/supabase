@@ -1,4 +1,4 @@
-import { AiIconAnimation } from '../../layout/ai-icon-animation/ai-icon-animation'
+import { AiIconAnimation } from 'ui'
 
 interface AiIconProps {
   className?: string

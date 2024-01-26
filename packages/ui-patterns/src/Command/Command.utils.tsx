@@ -1,12 +1,7 @@
 import { Command as CommandPrimitive } from 'cmdk'
-import * as React from 'react'
+import React, { DetailedHTMLProps, HTMLAttributes, KeyboardEventHandler } from 'react'
 
-import { cn } from './../../lib/utils'
-
-import { DetailedHTMLProps, HTMLAttributes, KeyboardEventHandler } from 'react'
-import { LoadingLine } from '../LoadingLine/LoadingLine'
-import { Modal } from '../Modal'
-import { ModalProps } from '../Modal/Modal'
+import { LoadingLine, Modal, ModalProps, cn } from 'ui'
 import { useCommandMenu } from './CommandMenuProvider'
 import { commandScore } from './command-score'
 

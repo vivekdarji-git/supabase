@@ -1,10 +1,8 @@
+import { useCommandMenu } from '@ui-patterns/Command'
+import { useTheme } from 'next-themes'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-
-import { useSignOut } from 'lib/auth'
-import { useProfile } from 'lib/profile'
-import { useTheme } from 'next-themes'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,8 +15,10 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
   IconUser,
-  useCommandMenu,
 } from 'ui'
+
+import { useSignOut } from 'lib/auth'
+import { useProfile } from 'lib/profile'
 
 const UserSettingsDropdown = () => {
   const signOut = useSignOut()
