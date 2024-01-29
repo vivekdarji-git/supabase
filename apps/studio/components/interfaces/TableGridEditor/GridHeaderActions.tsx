@@ -15,18 +15,19 @@ import ConfirmationModal from 'components/ui/ConfirmationModal'
 import { useDatabasePoliciesQuery } from 'data/database-policies/database-policies-query'
 import { useDatabasePublicationsQuery } from 'data/database-publications/database-publications-query'
 import { useDatabasePublicationUpdateMutation } from 'data/database-publications/database-publications-update-mutation'
-import { useCheckPermissions, useFlag, useIsFeatureEnabled } from 'hooks'
+import { useCheckPermissions, useIsFeatureEnabled } from 'hooks'
 import { RoleImpersonationPopover } from '../RoleImpersonationSelector'
+import { useTableEditorStateSnapshot } from 'state/table-editor'
 
 export interface GridHeaderActionsProps {
   table: PostgresTable
 }
 
 const GridHeaderActions = ({ table }: GridHeaderActionsProps) => {
+  const snap = useTableEditorStateSnapshot()
   const { ref } = useParams()
   const { project } = useProjectContext()
   const realtimeEnabled = useIsFeatureEnabled('realtime:all')
-  const roleImpersonationEnabledFlag = useFlag('roleImpersonation')
 
   const [showEnableRealtime, setShowEnableRealtime] = useState(false)
 
@@ -147,7 +148,9 @@ const GridHeaderActions = ({ table }: GridHeaderActionsProps) => {
               )
             }
           >
-            <Link href={`/project/${projectRef}/auth/policies?search=${table.id}`}>
+            <Link
+              href={`/project/${projectRef}/auth/policies?search=${table.id}&schema=${snap.selectedSchemaName}`}
+            >
               {!table.rls_enabled
                 ? 'RLS is not enabled'
                 : `${policies.length == 0 ? 'No' : policies.length} active RLS polic${
@@ -157,7 +160,7 @@ const GridHeaderActions = ({ table }: GridHeaderActionsProps) => {
           </Button>
         )}
 
-        {roleImpersonationEnabledFlag && <RoleImpersonationPopover serviceRoleLabel="postgres" />}
+        <RoleImpersonationPopover serviceRoleLabel="postgres" />
 
         {realtimeEnabled && (
           <Button

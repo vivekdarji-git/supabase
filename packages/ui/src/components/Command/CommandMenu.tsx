@@ -84,7 +84,11 @@ const CommandMenu = () => {
   }
 
   const commandListMaxHeight =
-    currentPage === COMMAND_ROUTES.DOCS_SEARCH ? 'min(600px, 50vh)' : '300px'
+    currentPage === COMMAND_ROUTES.DOCS_SEARCH ||
+    currentPage === COMMAND_ROUTES.AI ||
+    currentPage === COMMAND_ROUTES.GENERATE_SQL
+      ? 'min(600px, 50vh)'
+      : '300px'
 
   return (
     <>
@@ -113,7 +117,12 @@ const CommandMenu = () => {
         <CommandList
           style={{
             maxHeight: commandListMaxHeight,
-            height: currentPage === COMMAND_ROUTES.DOCS_SEARCH ? commandListMaxHeight : 'auto',
+            height:
+              currentPage === COMMAND_ROUTES.DOCS_SEARCH ||
+              currentPage === COMMAND_ROUTES.AI ||
+              currentPage === COMMAND_ROUTES.GENERATE_SQL
+                ? commandListMaxHeight
+                : 'auto',
           }}
           className="my-2"
         >
@@ -125,7 +134,7 @@ const CommandMenu = () => {
                   value={site === 'docs' ? `${FORCE_MOUNT_ITEM}--docs-search` : undefined}
                   onSelect={() => setPages([...pages, COMMAND_ROUTES.DOCS_SEARCH])}
                 >
-                  <IconBook className="" />
+                  <IconBook />
 
                   <span>
                     Search the docs
@@ -177,7 +186,13 @@ const CommandMenu = () => {
               {site === 'docs' && (
                 <CommandGroup heading="Projects">
                   {sharedItems.projectTools.map((item) => (
-                    <CommandItem key={item.url} type="link" onSelect={() => router.push(item.url)}>
+                    <CommandItem
+                      key={item.url}
+                      type="link"
+                      onSelect={() =>
+                        window.open(`https://supabase.com/dashboard${item.url}`, '_blank')
+                      }
+                    >
                       <IconArrowRight className="text-foreground-muted" />
                       <CommandLabel>
                         <span className="font-bold"> {item.label}</span>
@@ -190,7 +205,13 @@ const CommandMenu = () => {
               {site === 'docs' && (
                 <CommandGroup heading="Studio tools">
                   {sharedItems.tools.map((item) => (
-                    <CommandItem key={item.url} type="link" onSelect={() => router.push(item.url)}>
+                    <CommandItem
+                      key={item.url}
+                      type="link"
+                      onSelect={() =>
+                        window.open(`https://supabase.com/dashboard${item.url}`, '_blank')
+                      }
+                    >
                       <IconArrowRight className="text-foreground-muted" />
                       <CommandLabel>
                         Go to <span className="font-bold"> {item.label}</span>
