@@ -8,18 +8,6 @@ name: supabase
 version: "3.8"
 services:
 
-  mailhog:
-    image: mailhog/mailhog
-    ports:
-      - "8025:8025" # Web UI
-      - "1025:1025" # SMTP server
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8025"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-    restart: always
-
   studio:
     container_name: supabase-studio
     image: supabase/studio:20240101-8e4a094
@@ -90,8 +78,6 @@ services:
     container_name: supabase-auth
     image: supabase/gotrue:v2.132.3
     depends_on:
-      mailhog:
-        condition: service_healthy
       db:
         # Disable this if you are using an external Postgres database
         condition: service_healthy
